@@ -1,4 +1,5 @@
 #pragma once
+#include <cmath>
 
 #include <cstdint>
 #include <vector>
@@ -19,6 +20,10 @@ public:
 
 private:
     // TODO: what do you need to accumulate bits before you have a full byte?
+    int bytePosition=7;
+    std::vector<uint8_t> bytes_;
+    uint8_t curr_byte_ = 0;
+    int bits_in_current = 0; 
 };
 
 // Bit-level reader over a byte buffer produced by BitWriter.
@@ -38,4 +43,9 @@ public:
 
 private:
     // TODO
+    int bytePosition = 7;
+    size_t bit_length_=0;
+    std::vector<uint8_t> byte_buffer;
+    size_t byteIndex=0;
+    size_t bitIndex=0;
 };
