@@ -19,7 +19,6 @@ public:
     std::vector<uint8_t> finish();
 
 private:
-    // TODO: what do you need to accumulate bits before you have a full byte?
     int bytePosition=7;
     std::vector<uint8_t> bytes_;
     uint8_t curr_byte_ = 0;
@@ -42,7 +41,6 @@ public:
     bool at_end() const;
 
 private:
-    // TODO
     int bytePosition = 7;
     size_t bit_length_=0;
     std::vector<uint8_t> byte_buffer;
