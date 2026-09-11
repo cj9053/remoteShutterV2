@@ -19,7 +19,9 @@ struct CompareNodes{
 std::shared_ptr<HuffmanNode> build_tree(const std::map<uint8_t, int>& freq_table){
     // Init priority queue
     std::priority_queue<std::shared_ptr<HuffmanNode>,std::vector<std::shared_ptr<HuffmanNode>>, CompareNodes > minPQ;
-
+    if(freq_table.empty()){
+        return nullptr;
+    }
     // Populate pq with data from freq table
     for(const auto& [byte, frequency] : freq_table){
         minPQ.push(std::make_shared<HuffmanNode>(byte,frequency));
@@ -41,7 +43,11 @@ std::shared_ptr<HuffmanNode> build_tree(const std::map<uint8_t, int>& freq_table
 // Need to build code table, need to store a section of data along with that sections information. 
 // Map holds the information(code,depth) of a given byte
 std::map<uint8_t, std::pair<uint32_t, int>> build_code_table(const std::shared_ptr<HuffmanNode>& root){
+    
     std::map<uint8_t,std::pair<uint32_t,int>> code_table;
+    if(root == nullptr){
+        return code_table;
+    }
     uint32_t code=0;
     int depth=0;
     if(root->is_leaf()){
@@ -76,11 +82,29 @@ std::vector<uint8_t> huffman_encode(const std::vector<uint8_t>& data, const std:
         auto depth = table_byte -> second.second;
         writer.write_bits(code,depth);
     }
+    //returns encoded data
     return writer.finish();
 }
 
 
 
-std::vector<uint8_t> huffman_decode( const std::vector<uint8_t>& encoded, size_t bit_length, const std::shared_ptr<HuffmanNode>& root, size_t original_length){
-    
+std::vector<uint8_t> huffman_decode(const std::vector<uint8_t>& encoded, size_t bit_length, const std::shared_ptr<HuffmanNode>& root, size_t original_length){
+    BitReader reader(encoded, bit_length); 
+    std::vector<uint8_t> decoded;
+    // Iterate through encoded bits
+    for(size_t i=0; i<original_length; i++){
+        auto curr_node = root;
+        while(!curr_node->is_leaf()){
+            auto curr_bit = reader.read_bit();
+            if(curr_bit ==0){
+                curr_node = curr_node->left;
+            }else{
+                curr_node = curr_node->right;
+            }
+            
+        }
+        decoded.push_back(curr_node->byte);
+    }
+    return decoded;
+
 }
