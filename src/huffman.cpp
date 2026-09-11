@@ -1,4 +1,5 @@
 #include "huffman.h"
+#include "bitstream.h"
 #include <map>
 #include <queue>
 void code_table_helper(const std::shared_ptr<HuffmanNode>& curr_node, std::map<uint8_t, std::pair<uint32_t, int>>& code_table, uint32_t code, int depth);
@@ -67,5 +68,19 @@ void code_table_helper(const std::shared_ptr<HuffmanNode>& curr_node, std::map<u
 
 
 
+std::vector<uint8_t> huffman_encode(const std::vector<uint8_t>& data, const std::map<uint8_t, std::pair<uint32_t, int>>& code_table){
+    BitWriter writer; 
+    for(const auto& byte: data){
+        auto table_byte = code_table.find(byte);
+        auto code = table_byte -> second.first;
+        auto depth = table_byte -> second.second;
+        writer.write_bits(code,depth);
+    }
+    return writer.finish();
+}
 
 
+
+std::vector<uint8_t> huffman_decode( const std::vector<uint8_t>& encoded, size_t bit_length, const std::shared_ptr<HuffmanNode>& root, size_t original_length){
+    
+}
