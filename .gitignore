@@ -5,3 +5,6 @@ build/
 .claude/
 PROGRESS.md
 **/superpowers/
+.tokensave/
+graphify-out/
+headroom.log

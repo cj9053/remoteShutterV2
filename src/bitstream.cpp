@@ -2,6 +2,7 @@
 #include <cmath>
 
 //need to append one bit to the stream
+
 void BitWriter::write_bit(int bit){
     if(bit!=0 && bit !=1){
         return;
@@ -20,6 +21,7 @@ void BitWriter::write_bit(int bit){
     }
 }
 
+//helper func, extracts bits
 void BitWriter::write_bits(uint32_t value, int width){
     for (int i=width-1; i>= 0; i--){
         int current_bit = (value >> i) & 1;

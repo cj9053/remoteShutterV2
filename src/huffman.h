@@ -24,6 +24,8 @@ std::shared_ptr<HuffmanNode> build_tree(const std::map<uint8_t, int>& freq_table
 
 // One entry per byte value present in the tree: (code bits, code width).
 // Root-to-leaf path, left = 0, right = 1.
+void code_table_helper(const std::shared_ptr<HuffmanNode>& curr_node, std::map<uint8_t, std::pair<uint32_t, int>>& code_table, uint32_t code, int depth);
+
 std::map<uint8_t, std::pair<uint32_t, int>> build_code_table(
     const std::shared_ptr<HuffmanNode>& root);
 
