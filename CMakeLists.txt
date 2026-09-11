@@ -24,3 +24,10 @@ target_include_directories(huffman PUBLIC src)
 
 add_executable(huffman_test tests/huffman_test.cpp)
 target_link_libraries(huffman_test PRIVATE huffman)
+
+# --- lzss ---
+add_library(lzss src/lzss.cpp)
+target_include_directories(lzss PUBLIC src)
+
+add_executable(lzss_test tests/lzss_test.cpp)
+target_link_libraries(lzss_test PRIVATE lzss)
