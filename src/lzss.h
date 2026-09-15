@@ -20,16 +20,16 @@ constexpr size_t MAX_MATCH = 255;
 // back-reference copying `length` bytes starting `offset` bytes before
 // the current output position.
 struct Token {
-    bool is_literal;
+    bool is_literal = false;
 
     // Valid when is_literal is true.
-    uint8_t literal;
+    uint8_t literal = 0;
 
     // Valid when is_literal is false. offset is a distance (>=1),
     // measured backward from the current position in the output being
     // built; length is in [MIN_MATCH, MAX_MATCH].
-    uint16_t offset;
-    uint16_t length;
+    uint16_t offset = 0;
+    uint16_t length = 0;
 };
 
 // A single "how far back / how long" result from searching for a match.

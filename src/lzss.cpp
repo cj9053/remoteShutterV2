@@ -27,10 +27,13 @@ Match find_longest_match(const std::vector<uint8_t>& data, size_t pos){
         search_buffer_start = std::max(size_t(0),(pos-WINDOW_SIZE));
     }
     //iterate through candidate matches
+    //sliding window
+    //outer loop acts as the search buffer
     for(size_t i=search_buffer_start; i<pos; i++){
         size_t j=0;
         size_t curr_length=0;
-
+        //inner loop looks ahead to see if there are any candidate matches, if true, start checking 
+        //whether element @ index j+i == element @ pos+j 
         while(pos+j<data.size()&&j<MAX_MATCH){
             if(data[j+i]==data[pos+j]){
                 curr_length++;
@@ -51,4 +54,31 @@ Match find_longest_match(const std::vector<uint8_t>& data, size_t pos){
     return match_;
     
     
+}
+
+std::vector<Token> lzss_encode(const std::vector<uint8_t>& data){
+    
+    std::vector<Token> tokenized;
+    
+    for(size_t i=0; i<data.size();){
+        Match result = find_longest_match(data,i);
+        Token token_;
+
+        if(result.length==0){
+            token_.is_literal=true;
+            token_.literal=data[i];
+            tokenized.push_back(token_);
+            i++;
+        }else{
+            token_.offset=result.offset;
+            token_.length=result.length;
+            tokenized.push_back(token_);
+            i+=result.length;
+        }
+    }
+    return tokenized;
+}
+
+std::vector<uint8_t> lzss_decode(const std::vector<Token>& tokens){
+    std::vector<Token> output; 
 }
