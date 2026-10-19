@@ -18,7 +18,7 @@ struct CompareNodes{
 };
 std::shared_ptr<HuffmanNode> build_tree(const std::map<uint8_t, int>& freq_table){
     // Init priority queue
-    std::priority_queue<std::shared_ptr<HuffmanNode>,std::vector<std::shared_ptr<HuffmanNode>>, CompareNodes > minPQ;
+    std::priority_queue<std::shared_ptr<HuffmanNode>,std::vector<std::shared_ptr<HuffmanNode>>,CompareNodes> minPQ;
     if(freq_table.empty()){
         return nullptr;
     }

@@ -1,15 +1,5 @@
 #include "lzss.h"
 
-// TODO: implement each function declared in lzss.h.
-//
-// Reminder of the contract (see lzss.h and the design doc):
-//   - find_longest_match: scan backward from pos, within WINDOW_SIZE,
-//     for the longest run that also occurs starting at pos. Cap length
-//     at MAX_MATCH and at the bytes actually remaining in data.
-//   - lzss_encode: walk the buffer; at each position try
-//     find_longest_match. If it found >= MIN_MATCH, emit a match token
-//     and advance by the match length; otherwise emit one literal token
-//     and advance by 1.
 //   - lzss_decode: replay tokens into a growing output buffer. Match
 //     tokens must copy byte by byte from the *output*, not the input --
 //     watch the overlapping-copy case (offset < length).
@@ -18,11 +8,15 @@
 // longest match starts at pos, length is capped by MAX_MATCH
 Match find_longest_match(const std::vector<uint8_t>& data, size_t pos){
     Match match_;
+    //off set determines how far the search window 
+    // goes from this point backwards
     match_.offset = pos;
     match_.length=0;
 
-        //current max length
-    size_t search_buffer_start=0;
+    //current max length
+
+    size_t search_buffer_start=0; 
+    //start from idx 0 if window hasnt exceeded max match 
     if(pos>WINDOW_SIZE){
         search_buffer_start = std::max(size_t(0),(pos-WINDOW_SIZE));
     }
@@ -30,7 +24,7 @@ Match find_longest_match(const std::vector<uint8_t>& data, size_t pos){
     //sliding window
     //outer loop acts as the search buffer
     for(size_t i=search_buffer_start; i<pos; i++){
-        size_t j=0;
+        size_t j=0; 
         size_t curr_length=0;
         //inner loop looks ahead to see if there are any candidate matches, if true, start checking 
         //whether element @ index j+i == element @ pos+j 
@@ -80,5 +74,22 @@ std::vector<Token> lzss_encode(const std::vector<uint8_t>& data){
 }
 
 std::vector<uint8_t> lzss_decode(const std::vector<Token>& tokens){
-    std::vector<Token> output; 
+    std::vector<uint8_t> decodedBytes;
+    for(size_t i=0; i<tokens.size(); i++){
+        size_t arrSize=decodedBytes.size();
+        if(tokens[i].is_literal){
+            decodedBytes.push_back(tokens[i].literal);
+        }else{
+            size_t readIdx=arrSize-tokens[i].offset;
+
+            size_t copiedByteCount=0;
+            while(copiedByteCount<tokens[i].length){
+                decodedBytes.push_back(decodedBytes[readIdx]);
+                readIdx++;
+                copiedByteCount++;
+            }
+        }
+    }
+    return decodedBytes;
+
 }
