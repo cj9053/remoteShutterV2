@@ -69,6 +69,8 @@ For system-design or concept topics (threading, sockets, HTTP, wire format), exp
 - Dereferencing a null/empty sentinel returned by an upstream function.
 - Adding unnecessary guards that introduce new bugs.
 - Conflating two index variables (candidate position vs. match length so far).
+- Using a token/loop index where a byte count or output size belongs (`i - offset` vs `output.size() - offset`); comparing a position to a count (`readIdx < length`), which only works when the start is 0. Ask what each variable and each `.size()` counts.
+- Answering with a value when asked for a position (the byte `A` instead of index `0`).
 - Bounds-checking the wrong expression (checking `j` instead of `pos + j`).
 - Magic numbers instead of named constants; `>` vs `>=` on thresholds.
 - Dead code after a `return`; non-void function with a bare `return;`.
